@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+<Proyecto_Isidoro>
+<version>0.1.0</version>
+</Proyecto_Isidoro>
+    </modules>
+    <frontend>
+        <routers>
+            <isidoro>
+                <use>standard</use>
+                <args>
+                    <module>Proyecto_Isidoro</module>
+                    <frontName>isidoro</frontName>
+                </args>
+            </isidoro>
+        </routers>
+    </frontend>
+</config>

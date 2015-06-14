@@ -1,0 +1,47 @@
+<?php
+class Proyecto_Isidoro_RecordarController extends Mage_Core_Controller_Front_Action {
+	public function indexAction() {
+		$this->getDatos();
+		$this->crearCliente();
+		//$this->loadLayout();     
+	        //$this->renderLayout();
+		
+		
+	}
+	private function getDatos(){
+		return $post = $this->getRequest()->getPost();
+		//var_dump($post["nombre"]);
+	}
+	private function crearCliente(){
+		$post =$this->getDatos();
+		$websiteId = Mage::app()->getWebsite()->getId();
+		$store = Mage::app()->getStore();
+		
+ 
+		$customer = Mage::getModel("customer/customer");
+		$customer   ->setWebsiteId($websiteId)
+			    ->setStore($store)
+			    ->setFirstname($post["nombre"])
+			    ->setLastname($post["apellido"])
+			    ->setEmail($post["email"])
+			    ->setPrefix($post["tipoEvento"])//lo guardo en el campo de prefijo.
+			    ->setDob($post["fechaEvento"])//formato aaaa-mm-dd lo guardo en el campo de cliente de dia de cumpleaños.
+			    ->setSuffix($post["antelacion"])
+			    ->setPassword($post["pass"])
+			    ->setGroupId($this->getIdGrupo());
+		try{
+		    	$customer->save();
+			$this->loadLayout();     
+			$this->renderLayout();
+		}
+		catch (Exception $e) {
+		    Zend_Debug::dump($e->getMessage());
+		}	
+	}
+	private function getIdGrupo(){
+		$nombreGrupo = "Recordatorio";//Nombre del grupo creado por consola.
+		$grupo = Mage::getModel('customer/group');
+		$grupo->load($nombreGrupo, 'customer_group_code');
+		return $grupo->getId();
+	}
+}
